@@ -1,7 +1,12 @@
 "use client"
 
 import React from "react"
-import { Bell, MessageCircle, ShoppingCart, type LucideIcon } from "lucide-react"
+import {
+  Bell,
+  MessageCircle,
+  ShoppingCart,
+  type LucideIcon,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
@@ -16,10 +21,21 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import { toast } from "@/hooks/use-toast"
 
-function IconButton({ icon: Icon, count, srLabel }: { icon: LucideIcon; count?: number; srLabel: string }) {
+function IconButton({
+  icon: Icon,
+  count,
+  srLabel,
+  onClick,
+}: {
+  icon: LucideIcon
+  count?: number
+  srLabel: string
+  onClick?: () => void
+}) {
   return (
-    <Button variant="ghost" size="icon" className="relative">
+    <Button variant="ghost" size="icon" onClick={onClick} className="relative">
       <Icon className="h-4 w-4" />
       {count && count > 0 && (
         <Badge className="absolute -top-1 -right-1 h-4 min-w-4 p-0 text-[10px] leading-none">
@@ -47,6 +63,15 @@ export function DashboardHeader() {
   const chatCount = 1
   const cartCount = 0
 
+  const handleCartClick = () =>
+    toast({ title: "Cart", description: "Shopping cart clicked" })
+
+  const handleNotificationClick = () =>
+    toast({ title: "Notifications", description: "You have no new notifications" })
+
+  const handleChatClick = () =>
+    toast({ title: "Chats", description: "No new messages" })
+
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
       <div className="flex items-center gap-2 px-4">
@@ -72,9 +97,24 @@ export function DashboardHeader() {
         </Breadcrumb>
       </div>
       <div className="ml-auto flex items-center gap-2 px-4">
-        <IconButton icon={ShoppingCart} count={cartCount} srLabel="Shopping cart" />
-        <IconButton icon={Bell} count={notificationCount} srLabel="Notifications" />
-        <IconButton icon={MessageCircle} count={chatCount} srLabel="Chats" />
+        <IconButton
+          icon={ShoppingCart}
+          count={cartCount}
+          srLabel="Shopping cart"
+          onClick={handleCartClick}
+        />
+        <IconButton
+          icon={Bell}
+          count={notificationCount}
+          srLabel="Notifications"
+          onClick={handleNotificationClick}
+        />
+        <IconButton
+          icon={MessageCircle}
+          count={chatCount}
+          srLabel="Chats"
+          onClick={handleChatClick}
+        />
         <ThemeToggle />
       </div>
     </header>
