@@ -3,6 +3,7 @@
 import React from "react"
 import { Bell, MessageCircle, ShoppingCart, type LucideIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -17,19 +18,42 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 
-function IconButton({ icon: Icon, count, srLabel }: { icon: LucideIcon; count?: number; srLabel: string }) {
-  return (
-    <Button variant="ghost" size="icon" className="relative">
-      <Icon className="h-4 w-4" />
-      {count && count > 0 && (
-        <Badge className="absolute -top-1 -right-1 h-4 min-w-4 p-0 text-[10px] leading-none">
-          {count}
-        </Badge>
-      )}
-      <span className="sr-only">{srLabel}</span>
-    </Button>
-  )
+type IconButtonProps = {
+  title?: string
+  customFunc?: () => void
+  icon: LucideIcon
+  dotColor?: string
+  count?: number
+  srLabel?: string
 }
+
+const IconButton: React.FC<IconButtonProps> = ({
+  title,
+  customFunc,
+  icon: Icon,
+  dotColor,
+  count,
+  srLabel,
+}) => (
+  <Button
+    variant="ghost"
+    className="relative h-10 w-10 p-0"
+    onClick={customFunc}
+    title={title}
+  >
+    {dotColor && (
+      <span
+        className="absolute right-0 top-0 h-2.5 w-2.5 rounded-full"
+        style={{ background: dotColor }}
+      />
+    )}
+    {count !== undefined && count > 0 && (
+      <Badge className="absolute -top-1 -right-1">{count}</Badge>
+    )}
+    <span className="sr-only">{srLabel}</span>
+    <Icon className="h-5 w-5" />
+  </Button>
+)
 
 export function DashboardHeader() {
   const pathname = usePathname()
@@ -54,6 +78,13 @@ export function DashboardHeader() {
         <Separator orientation="vertical" className="mr-2 h-4" />
         <Breadcrumb>
           <BreadcrumbList>
+            <BreadcrumbItem className="hidden md:block">
+              <BreadcrumbLink href="/">Dashboard</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator className="hidden md:block" />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Overview</BreadcrumbPage>
+            </BreadcrumbItem>
             {breadcrumbs.map((crumb, idx) => (
               <React.Fragment key={crumb.href}>
                 <BreadcrumbItem className={idx === 0 ? "hidden md:block" : undefined}>
