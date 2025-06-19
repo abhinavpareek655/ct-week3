@@ -4,7 +4,7 @@ import * as React from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Plus, MoreHorizontal } from "lucide-react"
+import { Plus, MoreHorizontal, ChevronDown, ChevronUp } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 interface Task {
@@ -87,6 +87,10 @@ export function KanbanBoard() {
   const [columns, setColumns] = React.useState<Column[]>(initialData)
   const [draggedTask, setDraggedTask] = React.useState<Task | null>(null)
   const [draggedFrom, setDraggedFrom] = React.useState<string | null>(null)
+  const [collapsedTasks, setCollapsedTasks] = React.useState<Record<string, boolean>>({})
+
+  const toggleCollapse = (id: string) =>
+    setCollapsedTasks((prev) => ({ ...prev, [id]: !prev[id] }))
 
   const handleDragStart = (e: React.DragEvent, task: Task, columnId: string) => {
     setDraggedTask(task)
@@ -149,7 +153,7 @@ export function KanbanBoard() {
       {columns.map((column) => (
         <div
           key={column.id}
-          className="flex-shrink-0 w-80"
+          className="flex-shrink-0 w-60 sm:w-72 md:w-80"
           onDragOver={handleDragOver}
           onDrop={(e) => handleDrop(e, column.id)}
         >
@@ -178,25 +182,43 @@ export function KanbanBoard() {
                   <CardContent className="p-3">
                     <div className="flex items-start justify-between mb-2">
                       <h4 className="font-medium text-sm">{task.title}</h4>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                            <MoreHorizontal className="h-3 w-3" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
-                          <DropdownMenuItem>Delete</DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                      <div className="flex items-center gap-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-6 w-6 p-0"
+                          onClick={() => toggleCollapse(task.id)}
+                        >
+                          {collapsedTasks[task.id] ? (
+                            <ChevronDown className="h-3 w-3" />
+                          ) : (
+                            <ChevronUp className="h-3 w-3" />
+                          )}
+                        </Button>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                              <MoreHorizontal className="h-3 w-3" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem>Edit</DropdownMenuItem>
+                            <DropdownMenuItem>Delete</DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
                     </div>
-                    <p className="text-xs text-muted-foreground mb-3">{task.description}</p>
-                    <div className="flex items-center justify-between">
-                      <Badge variant={getPriorityColor(task.priority)} className="text-xs">
-                        {task.priority}
-                      </Badge>
-                      <span className="text-xs text-muted-foreground">{task.assignee}</span>
-                    </div>
+                    {!collapsedTasks[task.id] && (
+                      <>
+                        <p className="text-xs text-muted-foreground mb-3">{task.description}</p>
+                        <div className="flex items-center justify-between">
+                          <Badge variant={getPriorityColor(task.priority)} className="text-xs">
+                            {task.priority}
+                          </Badge>
+                          <span className="text-xs text-muted-foreground">{task.assignee}</span>
+                        </div>
+                      </>
+                    )}
                   </CardContent>
                 </Card>
               ))}
