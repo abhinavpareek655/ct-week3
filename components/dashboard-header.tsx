@@ -3,7 +3,6 @@
 import React from "react"
 import { Bell, MessageCircle, ShoppingCart, type LucideIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -17,6 +16,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import { toast } from "@/hooks/use-toast"
 
 type IconButtonProps = {
   title?: string
@@ -78,13 +78,6 @@ export function DashboardHeader() {
         <Separator orientation="vertical" className="mr-2 h-4" />
         <Breadcrumb>
           <BreadcrumbList>
-            <BreadcrumbItem className="hidden md:block">
-              <BreadcrumbLink href="/">Dashboard</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator className="hidden md:block" />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Overview</BreadcrumbPage>
-            </BreadcrumbItem>
             {breadcrumbs.map((crumb, idx) => (
               <React.Fragment key={crumb.href}>
                 <BreadcrumbItem className={idx === 0 ? "hidden md:block" : undefined}>
