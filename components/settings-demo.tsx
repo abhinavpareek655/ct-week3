@@ -28,7 +28,11 @@ export function SettingsDemo() {
   const saveProfile = () => {
     setSaving(true)
     localStorage.setItem("userProfile", JSON.stringify(profile))
-    toast({ title: "Profile saved locally" })
+    toast({ 
+      title: "Profile saved",
+      description: "Your profile information has been updated. Reload the page to see changes.",
+      variant: "success",
+     })
     setSaving(false)
   }
 
