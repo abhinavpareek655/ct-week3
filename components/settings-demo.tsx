@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useToast } from "@/hooks/use-toast"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
@@ -21,9 +22,14 @@ export function SettingsDemo() {
     bio: ""
   });
 
+  const [saving, setSaving] = React.useState(false)
+  const { toast } = useToast()
+
   const saveProfile = () => {
+    setSaving(true)
     localStorage.setItem("userProfile", JSON.stringify(profile))
-    alert("Profile saved locally")
+    toast({ title: "Profile saved locally" })
+    setSaving(false)
   }
 
   return (
@@ -148,7 +154,9 @@ export function SettingsDemo() {
           onChange={(e) => setProfile({...profile, bio: e.target.value})}
         />
           </div>
-          <Button onClick={saveProfile}>Save Changes</Button>
+          <Button onClick={saveProfile} disabled={saving}>
+            {saving ? "Saving..." : "Save Changes"}
+          </Button>
         </CardContent>
       </Card>
     </div>
