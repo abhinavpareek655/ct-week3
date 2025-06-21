@@ -36,30 +36,40 @@ const data: Payment[] = [
     amount: 316,
     status: "success",
     email: "ken99@yahoo.com",
+    name: "Ken Johnson",
+    location: "New York, NY",
   },
   {
     id: "3u1reuv4",
     amount: 242,
     status: "success",
     email: "Abe45@gmail.com",
+    name: "Abe Lincoln",
+    location: "Los Angeles, CA",
   },
   {
     id: "derv1ws0",
     amount: 837,
     status: "processing",
     email: "Monserrat44@gmail.com",
+    name: "Monserrat Smith",
+    location: "Chicago, IL",
   },
   {
     id: "5kma53ae",
     amount: 874,
     status: "success",
     email: "Silas22@gmail.com",
+    name: "Silas Green",
+    location: "Houston, TX",
   },
   {
     id: "bhqecj4p",
     amount: 721,
     status: "failed",
     email: "carmella@hotmail.com",
+    name: "Carmella White",
+    location: "Phoenix, AZ",
   },
 ]
 
@@ -68,6 +78,8 @@ export type Payment = {
   amount: number
   status: "pending" | "processing" | "success" | "failed"
   email: string
+  name: string
+  location: string
 }
 
 export const columns: ColumnDef<Payment>[] = [
@@ -92,13 +104,15 @@ export const columns: ColumnDef<Payment>[] = [
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: () => <div className="text-center">Status</div>,
     cell: ({ row }) => {
       const status = row.getValue("status") as string
       return (
-        <Badge variant={status === "success" ? "default" : status === "processing" ? "secondary" : "destructive"}>
-          {status}
-        </Badge>
+        <div className="text-center">
+          <Badge variant={status === "success" ? "default" : status === "processing" ? "secondary" : "destructive"}>
+            {status}
+          </Badge>
+        </div>
       )
     },
   },
@@ -106,13 +120,31 @@ export const columns: ColumnDef<Payment>[] = [
     accessorKey: "email",
     header: ({ column }) => {
       return (
-        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          Email
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="text-center">
+          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            Email
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("email")}</div>,
+  },
+  {
+    accessorKey: "location",
+    header: () => <div className="text-center">Location</div>,
+    cell: ({ row }) => {
+      const location = row.getValue("location") as string
+      return <div className="text-center">{location}</div>
+    }
+  },
+  {
+    accessorKey: "name",
+    header: () => <div className="text-center">Name</div>,
+    cell: ({ row }) => {
+      const name = row.getValue("name") as string
+      return <div className="text-center">{name}</div>
+    }
   },
   {
     accessorKey: "amount",

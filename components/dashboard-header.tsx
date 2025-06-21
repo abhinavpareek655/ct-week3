@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { Bell, MessageCircle, ShoppingCart, type LucideIcon } from "lucide-react"
+import { Bell, MessageCircle, ShoppingCart, type LucideIcon, MoreHorizontal} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
@@ -16,7 +16,10 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { toast } from "@/hooks/use-toast"
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator } from "./ui/dropdown-menu"
+import { OpenChats } from "./open-chats"
+import { SeeNotifications } from "./see-notifications"
+import { ShowCart } from "./show-cart"
 
 type IconButtonProps = {
   title?: string
@@ -96,9 +99,9 @@ export function DashboardHeader() {
         </Breadcrumb>
       </div>
       <div className="ml-auto flex items-center gap-2 px-4">
-        <IconButton icon={ShoppingCart} count={cartCount} srLabel="Shopping cart" />
-        <IconButton icon={Bell} count={notificationCount} srLabel="Notifications" />
-        <IconButton icon={MessageCircle} count={chatCount} srLabel="Chats" />
+        <ShowCart />
+        <SeeNotifications />
+        <OpenChats />
         <ThemeToggle />
       </div>
     </header>
