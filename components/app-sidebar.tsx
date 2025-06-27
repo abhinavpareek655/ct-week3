@@ -3,7 +3,7 @@
 import * as React from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { BarChart3, Calendar, Home, Kanban, Settings, Table } from "lucide-react"
+import { BarChart3, Calendar, Home, Kanban, Settings, Table, FileText } from "lucide-react"
 
 import {
   Sidebar,
@@ -26,6 +26,7 @@ const defaultNav = [
   { title: "Charts",    url: "/charts",   icon: BarChart3 },
   { title: "Calendar",  url: "/calendar", icon: Calendar },
   { title: "Kanban",    url: "/kanban",   icon: Kanban },
+  { title: "Text Editor", url: "/text-editor", icon: FileText },
   { title: "Settings",  url: "/settings", icon: Settings },
 ]
 

@@ -83,3 +83,157 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* WYSIWYG Editor Styles */
+@layer components {
+  .ProseMirror {
+    outline: none;
+  }
+  
+  .ProseMirror p {
+    margin: 0 0 1rem 0;
+    line-height: 1.6;
+  }
+  
+  .ProseMirror p:last-child {
+    margin-bottom: 0;
+  }
+  
+  .ProseMirror div {
+    margin: 0;
+  }
+  
+  /* Handle line breaks properly */
+  .ProseMirror br {
+    display: block;
+    content: "";
+    margin-top: 0.5rem;
+  }
+  
+  /* Ensure template styles are applied */
+  .ProseMirror div[style*="margin-bottom"] {
+    margin-bottom: inherit !important;
+  }
+  
+  .ProseMirror div[style*="margin-top"] {
+    margin-top: inherit !important;
+  }
+  
+  .ProseMirror div[style*="margin-left"] {
+    margin-left: inherit !important;
+  }
+  
+  .ProseMirror div[style*="margin-right"] {
+    margin-right: inherit !important;
+  }
+  
+  .ProseMirror p[style*="margin-bottom"] {
+    margin-bottom: inherit !important;
+  }
+  
+  .ProseMirror p[style*="margin-top"] {
+    margin-top: inherit !important;
+  }
+  
+  /* Business Letter specific styles */
+  .ProseMirror div[style*="text-align: right"] p {
+    margin-bottom: 0.25rem;
+  }
+  
+  .ProseMirror div[style*="text-align: right"] p:last-child {
+    margin-bottom: 0;
+  }
+  
+  /* Ensure proper spacing for address blocks */
+  .ProseMirror div[style*="margin-bottom: 40px"] p {
+    margin-bottom: 0.25rem;
+  }
+  
+  .ProseMirror div[style*="margin-bottom: 40px"] p:last-child {
+    margin-bottom: 0;
+  }
+  
+  .ProseMirror ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin: 0.5rem 0;
+  }
+  
+  .ProseMirror ol {
+    list-style-type: decimal;
+    padding-left: 1.5rem;
+    margin: 0.5rem 0;
+  }
+  
+  .ProseMirror li {
+    margin: 0.25rem 0;
+    display: list-item;
+  }
+  
+  .ProseMirror ul li {
+    list-style-type: disc;
+  }
+  
+  .ProseMirror ol li {
+    list-style-type: decimal;
+  }
+  
+  .ProseMirror ul ul {
+    list-style-type: circle;
+    margin: 0.25rem 0;
+  }
+  
+  .ProseMirror ul ul ul {
+    list-style-type: square;
+  }
+  
+  .ProseMirror ol ol {
+    list-style-type: lower-alpha;
+  }
+  
+  .ProseMirror ol ol ol {
+    list-style-type: lower-roman;
+  }
+  
+  .ProseMirror h1, .ProseMirror h2, .ProseMirror h3, .ProseMirror h4, .ProseMirror h5, .ProseMirror h6 {
+    margin: 1.5rem 0 0.75rem 0;
+    line-height: 1.3;
+  }
+  
+  .ProseMirror h1:first-child, .ProseMirror h2:first-child, .ProseMirror h3:first-child,
+  .ProseMirror h4:first-child, .ProseMirror h5:first-child, .ProseMirror h6:first-child {
+    margin-top: 0;
+  }
+  
+  .ProseMirror strong {
+    font-weight: 600;
+  }
+  
+  .ProseMirror em {
+    font-style: italic;
+  }
+  
+  /* Business Letter Template Styles */
+  .ProseMirror .letter-header {
+    margin-bottom: 2.5rem !important;
+  }
+  
+  .ProseMirror .letter-recipient {
+    margin-bottom: 2.5rem !important;
+  }
+  
+  /* Ensure proper line height and spacing for all content */
+  .ProseMirror * {
+    line-height: inherit;
+  }
+  
+  /* Handle empty paragraphs */
+  .ProseMirror p:empty::before {
+    content: "\200B";
+  }
+  
+  /* Ensure proper spacing for signature blocks */
+  .ProseMirror p:has(br + br) {
+    margin-bottom: 1rem;
+  }
+}
