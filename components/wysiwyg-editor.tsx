@@ -72,35 +72,35 @@ const templates = {
   `,
   "Business Letter": `
     <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #374151;">
-      <div style="text-align: right; margin-bottom: 2rem;">
-        <p style="margin: 0 0 0.25rem 0;">Your Name</p>
-        <p style="margin: 0 0 0.25rem 0;">Your Address</p>
-        <p style="margin: 0 0 0.25rem 0;">City, State ZIP</p>
-        <p style="margin: 0 0 0.25rem 0;">Email Address</p>
-        <p style="margin: 0 0 1rem 0;">Phone Number</p>
-        <p style="margin: 0;">${new Date().toLocaleDateString()}</p>
+      <div style="text-align: right;">
+        <p>Your Name<br/>
+        Your Address<br/>
+        City, State ZIP<br/>
+        Email Address<br/>
+        Phone Number</p>
+        <p style="margin-top: 20px;">${new Date().toLocaleDateString()}</p>
       </div>
       
-      <div style="margin-bottom: 2rem;">
-        <p style="margin: 0 0 0.25rem 0;">Recipient Name</p>
-        <p style="margin: 0 0 0.25rem 0;">Company Name</p>
-        <p style="margin: 0 0 0.25rem 0;">Address</p>
-        <p style="margin: 0;">City, State ZIP</p>
+      <div style="margin-bottom: 40px;">
+        <p>Recipient Name<br/>
+        Company Name<br/>
+        Address<br/>
+        City, State ZIP</p>
       </div>
       
-      <p style="margin: 0 0 1rem 0;"><strong>Subject: [Subject Line]</strong></p>
+      <p><strong>Subject: [Subject Line]</strong></p>
       
-      <p style="margin: 0 0 1rem 0;">Dear [Recipient Name],</p>
+      <p>Dear [Recipient Name],</p>
       
-      <p style="margin: 0 0 1rem 0;">I am writing to [state your purpose]. This letter serves to [explain the main reason for writing].</p>
+      <p>I am writing to [state your purpose]. This letter serves to [explain the main reason for writing].</p>
       
-      <p style="margin: 0 0 1rem 0;">[Body paragraph with main content and details]</p>
+      <p>[Body paragraph with main content and details]</p>
       
-      <p style="margin: 0 0 1rem 0;">Thank you for your time and consideration. I look forward to hearing from you soon.</p>
+      <p>Thank you for your time and consideration. I look forward to hearing from you soon.</p>
       
-      <p style="margin: 0 0 0.5rem 0;">Sincerely,</p>
-      <p style="margin: 0 0 0.5rem 0;">[Your Signature]</p>
-      <p style="margin: 0;">Your Typed Name</p>
+      <p>Sincerely,<br/><br/>
+      [Your Signature]<br/>
+      Your Typed Name</p>
     </div>
   `,
   Resume: `
@@ -184,13 +184,7 @@ export function WysiwygEditor() {
 
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({
-        paragraph: {
-          HTMLAttributes: {
-            class: 'mb-3',
-          },
-        },
-      }),
+      StarterKit,
       Underline,
       TextAlign.configure({
         types: ["heading", "paragraph"],
@@ -235,16 +229,7 @@ export function WysiwygEditor() {
     `,
     editorProps: {
       attributes: {
-        class: "prose prose-lg max-w-none focus:outline-none min-h-[400px] p-6",
-      },
-      handleKeyDown: (view, event) => {
-        // Handle Shift+Enter for line breaks
-        if (event.key === 'Enter' && event.shiftKey) {
-          event.preventDefault()
-          editor?.chain().focus().setHardBreak().run()
-          return true
-        }
-        return false
+        class: "prose prose-lg max-w-none focus:outline-none min-h-[400px] p-6 [&_.ProseMirror]:outline-none [&_.ProseMirror_p]:mb-3 [&_.ProseMirror_br]:block [&_.ProseMirror_br]:h-4 [&_.ProseMirror_br]:content-['']",
       },
     },
   })
@@ -255,47 +240,17 @@ export function WysiwygEditor() {
     try {
       const html = editor.getHTML()
 
-      // Create a more Word-compatible HTML structure with better line break handling
+      // Create a more Word-compatible HTML structure
       const wordCompatibleHtml = `
         <html>
           <head>
             <meta charset="utf-8">
             <style>
-              body { 
-                font-family: Arial, sans-serif; 
-                line-height: 1.6; 
-                margin: 0;
-                padding: 20px;
-              }
-              p { 
-                margin: 0 0 12px 0; 
-                line-height: 1.6;
-              }
-              p:last-child {
-                margin-bottom: 0;
-              }
-              h1, h2, h3, h4, h5, h6 { 
-                margin: 16px 0 8px 0; 
-                line-height: 1.3;
-              }
-              ul, ol { 
-                margin: 12px 0; 
-                padding-left: 24px; 
-              }
-              li { 
-                margin: 4px 0; 
-              }
-              br {
-                display: block;
-                content: "";
-                margin-top: 8px;
-              }
-              div[style*="text-align: right"] p {
-                margin-bottom: 4px;
-              }
-              div[style*="margin-bottom"] p {
-                margin-bottom: 4px;
-              }
+              body { font-family: Arial, sans-serif; line-height: 1.6; }
+              p { margin: 0 0 12px 0; }
+              h1, h2, h3, h4, h5, h6 { margin: 16px 0 8px 0; }
+              ul, ol { margin: 12px 0; padding-left: 24px; }
+              li { margin: 4px 0; }
             </style>
           </head>
           <body>
