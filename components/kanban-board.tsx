@@ -7,6 +7,11 @@ import { Button } from "@/components/ui/button"
 import { Plus, MoreHorizontal, ChevronLeft, ChevronRight} from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { motion } from "framer-motion"
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"
+import { useRef } from "react"
 
 interface Task {
   id: string
@@ -251,9 +256,16 @@ export function KanbanBoard() {
                         </CardTitle>
                       </motion.div>
                     <div className="flex items-center space-x-1">
-                        <Button variant="ghost" size="sm">
-                          <Plus className="h-4 w-4" />
-                        </Button>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button variant="ghost" size="sm">
+                            <Plus className="h-4 w-4" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent align="end" className="w-80">
+                          <AddTaskForm onAdd={task => setColumns(cols => cols.map(col => col.id === column.id ? { ...col, tasks: [...col.tasks, task] } : col))} />
+                        </PopoverContent>
+                      </Popover>
                       <motion.div variants={buttonVariants} animate={animState}>
                         <Button variant="ghost" size="sm" onClick={() => toggleCollapse(column.id)}>
                           <ChevronLeft className="h-4 w-4" />
@@ -280,8 +292,15 @@ export function KanbanBoard() {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem>Edit</DropdownMenuItem>
-                              <DropdownMenuItem>Delete</DropdownMenuItem>
+                              <EditTaskPopover
+                                task={task}
+                                onEdit={updatedTask => setColumns(cols => cols.map(col => col.id === column.id ? { ...col, tasks: col.tasks.map(t => t.id === task.id ? updatedTask : t) } : col))}
+                              />
+                              <DropdownMenuItem
+                                onClick={() => setColumns(cols => cols.map(col => col.id === column.id ? { ...col, tasks: col.tasks.filter(t => t.id !== task.id) } : col))}
+                              >
+                                Delete
+                              </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </div>
@@ -306,5 +325,151 @@ export function KanbanBoard() {
         )
       })}
     </div>
+  )
+}
+
+function AddTaskForm({ onAdd }: { onAdd: (task: Task) => void }) {
+  const [title, setTitle] = React.useState("")
+  const [description, setDescription] = React.useState("")
+  const [priority, setPriority] = React.useState<"low"|"medium"|"high">("medium")
+  const [assignee, setAssignee] = React.useState("")
+  const [loading, setLoading] = React.useState(false)
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    const newTask: Task = {
+      id: Math.random().toString(36).slice(2),
+      title,
+      description,
+      priority,
+      assignee,
+    }
+    onAdd(newTask)
+    setTitle("")
+    setDescription("")
+    setPriority("medium")
+    setAssignee("")
+    setLoading(false)
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-3">
+      <Input
+        placeholder="Task title"
+        value={title}
+        onChange={e => setTitle(e.target.value)}
+        required
+      />
+      <Textarea
+        placeholder="Description"
+        value={description}
+        onChange={e => setDescription(e.target.value)}
+        rows={2}
+      />
+      <div className="flex gap-2">
+        <Select value={priority} onValueChange={v => setPriority(v as any)}>
+          <SelectTrigger className="w-28">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="low">Low</SelectItem>
+            <SelectItem value="medium">Medium</SelectItem>
+            <SelectItem value="high">High</SelectItem>
+          </SelectContent>
+        </Select>
+        <Input
+          placeholder="Assignee"
+          value={assignee}
+          onChange={e => setAssignee(e.target.value)}
+        />
+      </div>
+      <Button type="submit" disabled={loading || !title} className="w-full">
+        Add Task
+      </Button>
+    </form>
+  )
+}
+
+function EditTaskPopover({ task, onEdit }: { task: Task, onEdit: (task: Task) => void }) {
+  const [open, setOpen] = React.useState(false)
+  const [title, setTitle] = React.useState(task.title)
+  const [description, setDescription] = React.useState(task.description)
+  const [priority, setPriority] = React.useState<"low"|"medium"|"high">(task.priority)
+  const [assignee, setAssignee] = React.useState(task.assignee)
+  const [loading, setLoading] = React.useState(false)
+  const triggerRef = useRef<HTMLButtonElement>(null)
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    onEdit({
+      ...task,
+      title,
+      description,
+      priority,
+      assignee,
+    })
+    setLoading(false)
+    setOpen(false)
+  }
+
+  function handleEditClick(e: React.MouseEvent) {
+    e.preventDefault()
+    e.stopPropagation()
+    setOpen(true)
+  }
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <DropdownMenuItem asChild>
+          <button
+            ref={triggerRef}
+            type="button"
+            className="w-full text-left px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
+            onClick={handleEditClick}
+          >
+            Edit
+          </button>
+        </DropdownMenuItem>
+      </PopoverTrigger>
+      <PopoverContent align="end" className="w-80">
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <Input
+            placeholder="Task title"
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+            required
+          />
+          <Textarea
+            placeholder="Description"
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+            rows={2}
+          />
+          <div className="flex gap-2">
+            <Select value={priority} onValueChange={v => setPriority(v as any)}>
+              <SelectTrigger className="w-28">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="low">Low</SelectItem>
+                <SelectItem value="medium">Medium</SelectItem>
+                <SelectItem value="high">High</SelectItem>
+              </SelectContent>
+            </Select>
+            <Input
+              placeholder="Assignee"
+              value={assignee}
+              onChange={e => setAssignee(e.target.value)}
+            />
+          </div>
+          <Button type="submit" disabled={loading || !title} className="w-full">
+            Update Task
+          </Button>
+        </form>
+      </PopoverContent>
+    </Popover>
   )
 }
