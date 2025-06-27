@@ -20,6 +20,7 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLab
 import { OpenChats } from "./open-chats"
 import { SeeNotifications } from "./see-notifications"
 import { ShowCart } from "./show-cart"
+import { ChartThemeSelector } from "./chart-theme-selector"
 
 type IconButtonProps = {
   title?: string
@@ -69,11 +70,6 @@ export function DashboardHeader() {
     })),
   ]
 
-  // Example counts for demo purposes
-  const notificationCount = 2
-  const chatCount = 1
-  const cartCount = 0
-
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
       <div className="flex items-center gap-2 px-4">
@@ -103,6 +99,7 @@ export function DashboardHeader() {
         <SeeNotifications />
         <OpenChats />
         <ThemeToggle />
+        <ChartThemeSelector />
       </div>
     </header>
   )

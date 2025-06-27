@@ -80,11 +80,11 @@ export function ChartsDemo() {
             config={{
               desktop: {
                 label: "Desktop",
-                color: "hsl(var(--chart-1))",
+                color: undefined,
               },
               mobile: {
                 label: "Mobile",
-                color: "hsl(var(--chart-2))",
+                color: undefined,
               },
             }}
             className="h-[300px]"
@@ -111,11 +111,11 @@ export function ChartsDemo() {
             config={{
               revenue: {
                 label: "Revenue",
-                color: "hsl(var(--chart-1))",
+                color: undefined,
               },
               profit: {
                 label: "Profit",
-                color: "hsl(var(--chart-2))",
+                color: undefined,
               },
             }}
             className="h-[300px]"
@@ -142,19 +142,19 @@ export function ChartsDemo() {
         config={{
           desktop: {
             label: "Desktop",
-            color: "hsl(var(--chart-1))",
+            color: undefined,
           },
           mobile: {
             label: "Mobile",
-            color: "hsl(var(--chart-2))",
+            color: undefined,
           },
           tablet: {
             label: "Tablet",
-            color: "hsl(var(--chart-3))",
+            color: undefined,
           },
           other: {
             label: "Other",
-            color: "hsl(var(--chart-4))",
+            color: undefined,
           },
         }}
         className="h-[300px]"
@@ -188,11 +188,11 @@ export function ChartsDemo() {
             config={{
               desktop: {
                 label: "Desktop",
-                color: "hsl(var(--chart-1))",
+                color: undefined,
               },
               mobile: {
                 label: "Mobile",
-                color: "hsl(var(--chart-2))",
+                color: undefined,
               },
             }}
             className="h-[300px]"
@@ -217,8 +217,8 @@ export function ChartsDemo() {
         <CardContent>
           <ChartContainer
             config={{
-              desktop: { label: "Desktop", color: "hsl(var(--chart-1))" },
-              mobile:  { label: "Mobile",  color: "hsl(var(--chart-2))" },
+              desktop: { label: "Desktop", color: undefined },
+              mobile:  { label: "Mobile",  color: undefined },
             }}
             className="h-[300px]"
           >
@@ -251,7 +251,7 @@ export function ChartsDemo() {
         </CardHeader>
         <CardContent>
           <ChartContainer className="h-[300px]" config={{
-              mobile:  { label: "Mobile",  color: "hsl(var(--chart-1))" },
+              mobile:  { label: "Mobile",  color: undefined },
             }}>
             <ChartCanvas
               ratio={1}
